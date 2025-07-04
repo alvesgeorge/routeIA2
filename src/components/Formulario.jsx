@@ -25,8 +25,7 @@ export default function Formulario() {
           <FaCalendarAlt /> Data de Fim:
           <DatePicker selected={dataFim} onChange={(date) => setDataFim(date)} dateFormat="dd/MM/yyyy" />
         </label>
-       
-       <label>
+                <label>
           <FaUsers /> Perfil dos viajantes:
           <div className="perfil-opcoes">
             {['Casal', 'Família', 'Sozinho', 'Amigos', 'Sênior'].map((p) => (
@@ -73,3 +72,4 @@ export default function Formulario() {
     </div>
   )
 }
+
