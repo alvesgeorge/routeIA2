@@ -1,8 +1,7 @@
-// src/components/Formulario.jsx
-import React from 'react';
+import React, { useState } from 'react';
 import axios from 'axios';
 
-export default function Formulario({ onGerar }) {
+export default function Formulario({ onResultado }) {
   const [form, setForm] = useState({
     destino: '',
     dataInicio: '',
@@ -13,38 +12,33 @@ export default function Formulario({ onGerar }) {
     restricoes: ''
   });
 
-  const [carregando, setCarregando] = useState(false);
-
   const handleChange = (e) => {
     setForm({ ...form, [e.target.id]: e.target.value });
   };
 
   const handleSubmit = async () => {
-    setCarregando(true);
     try {
-      const resp = await axios.post('/api/gerar-roteiro', form);
-      onGerar(resp.data);
-    } catch (err) {
+      const response = await axios.post('/api/gerar-roteiro', form);
+      onResultado(response.data);
+    } catch (error) {
       alert('Erro ao gerar roteiro');
+      console.error(error);
     }
-    setCarregando(false);
   };
 
   return (
-    <div className="space-y-4">
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        <input id="destino" placeholder="Destino" value={form.destino} onChange={handleChange} className="p-2 border rounded" />
-        <input id="orcamento" placeholder="Orçamento (baixo/médio/alto)" value={form.orcamento} onChange={handleChange} className="p-2 border rounded" />
-        <input id="dataInicio" type="date" value={form.dataInicio} onChange={handleChange} className="p-2 border rounded" />
-        <input id="dataFim" type="date" value={form.dataFim} onChange={handleChange} className="p-2 border rounded" />
-      </div>
-      <textarea id="perfil" placeholder="Perfil dos viajantes" value={form.perfil} onChange={handleChange} className="w-full p-2 border rounded" />
-      <input id="preferencias" placeholder="Preferências" value={form.preferencias} onChange={handleChange} className="w-full p-2 border rounded" />
-      <input id="restricoes" placeholder="Restrições" value={form.restricoes} onChange={handleChange} className="w-full p-2 border rounded" />
-
-      <button onClick={handleSubmit} className="bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700">
-        {carregando ? 'Gerando...' : 'Gerar Roteiro'}
-      </button>
-    </div>
-  );
-}
+    <div className="bg-white rounded-xl shadow-md p-6 space-y-4">
+      {[
+        { label: 'Destino', id: 'destino', type: 'text' },
+        { label: 'Data de Início', id: 'dataInicio', type: 'date' },
+        { label: 'Data de Fim', id: 'dataFim', type: 'date' },
+        { label: 'Perfil dos Viajantes', id: 'perfil', type: 'textarea' },
+        { label: 'Preferências', id: 'preferencias', type: 'text' },
+        { label: 'Restrições', id: 'restricoes', type: 'text' }
+      ].map(({ label, id, type }) => (
+        <div key={id}>
+          <label className="font-semibold">{label}</label>
+          {type === 'textarea' ? (
+            <textarea id={id} value={form[id]} onChange={handleChange} className="w-full border p-2 rounded" />
+          ) : (
+            <input type={type} id={id} value={form[id]} onChange={handleChange} className="w-fu
