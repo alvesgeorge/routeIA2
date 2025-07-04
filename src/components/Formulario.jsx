@@ -1,89 +1,135 @@
-import './Formulario.css';
-import React, { useState } from 'react';
-import { FaUserFriends, FaPlane, FaMapMarkedAlt, FaMoneyBillWave, FaTags } from 'react-icons/fa';
+import React, { useState } from 'react'
+import DatePicker from 'react-datepicker'
+import 'react-datepicker/dist/react-datepicker.css'
+import Resultado from './Resultado'
 
 export default function Formulario() {
-  const [formData, setFormData] = useState({
+  const [formulario, setFormulario] = useState({
     destino: '',
-    dataInicio: '',
-    dataFim: '',
-    tipoRoteiro: '',
+    inicio: null,
+    fim: null,
+    roteiro: 'Cultural',
     perfil: '',
-    preferencias: [],
-    orcamento: '',
-    restricoes: ''
-  });
+    preferencias: '',
+    restricoes: '',
+    orcamento: 'Médio',
+  })
 
-  const tiposRoteiro = ['Cultural', 'Gastronômico', 'Natureza', 'Romântico'];
-  const perfis = ['Família', 'Casal', 'Sozinho', 'Melhor idade'];
-  const orcamentos = ['Econômico', 'Médio', 'Alto'];
-  const tagsPreferencias = ['Museus', 'Trilhas', 'Praia', 'Gastronomia'];
+  const [resultado, setResultado] = useState(null)
 
-  function togglePreferencia(item) {
-    setFormData(prev => {
-      const already = prev.preferencias.includes(item);
-      const newPrefs = already ? prev.preferencias.filter(i => i !== item) : [...prev.preferencias, item];
-      return { ...prev, preferencias: newPrefs };
-    });
+  const handleChange = (e) => {
+    const { name, value } = e.target
+    setFormulario((prev) => ({ ...prev, [name]: value }))
+  }
+
+  const handleDateChange = (date, name) => {
+    setFormulario((prev) => ({ ...prev, [name]: date }))
+  }
+
+  const handleSubmit = async (e) => {
+    e.preventDefault()
+    setResultado({ loading: true })
+
+    try {
+      const res = await fetch('/api/gerarRoteiro', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formulario),
+      })
+
+      const data = await res.json()
+      setResultado({ loading: false, data })
+    } catch (error) {
+      console.error(error)
+      setResultado({ loading: false, error: 'Erro ao gerar roteiro.' })
+    }
   }
 
   return (
-    <div className="form-container">
-      <h2><FaPlane /> Gerador de Roteiros com IA</h2>
-      <div className="form-card">
-        <label>Destino:</label>
-        <input type="text" placeholder="Digite o destino" />
-      </div>
+    <>
+      <form className="glass" onSubmit={handleSubmit}>
+        <div className="formulario">
+          <label>Destino:
+            <input
+              type="text"
+              name="destino"
+              value={formulario.destino}
+              onChange={handleChange}
+              placeholder="Digite o destino"
+              required
+            />
+          </label>
 
-      <div className="form-card">
-        <label>Data de Início:</label>
-        <input type="date" />
-        <label>Data de Fim:</label>
-        <input type="date" />
-      </div>
+          <label>Data de Início:
+            <DatePicker
+              selected={formulario.inicio}
+              onChange={(date) => handleDateChange(date, 'inicio')}
+              dateFormat="dd/MM/yyyy"
+              placeholderText="dd/mm/aaaa"
+            />
+          </label>
 
-      <div className="form-card">
-        <label><FaMapMarkedAlt /> Tipo de Roteiro:</label>
-        <div className="select-group">
-          {tiposRoteiro.map(tipo => (
-            <button key={tipo} className="card-btn">{tipo}</button>
-          ))}
+          <label>Data de Fim:
+            <DatePicker
+              selected={formulario.fim}
+              onChange={(date) => handleDateChange(date, 'fim')}
+              dateFormat="dd/MM/yyyy"
+              placeholderText="dd/mm/aaaa"
+            />
+          </label>
+
+          <label>Tipo de Roteiro:
+            <select name="roteiro" value={formulario.roteiro} onChange={handleChange}>
+              <option value="Cultural">Cultural</option>
+              <option value="Aventura">Aventura</option>
+              <option value="Gastronômico">Gastronômico</option>
+              <option value="Romântico">Romântico</option>
+              <option value="Personalizado">Personalizado</option>
+            </select>
+          </label>
+
+          <label>Perfil dos Viajantes:
+            <textarea
+              name="perfil"
+              value={formulario.perfil}
+              onChange={handleChange}
+              placeholder="Ex: Casal, Família, Mochileiros..."
+            />
+          </label>
+
+          <label>Preferências:
+            <input
+              type="text"
+              name="preferencias"
+              value={formulario.preferencias}
+              onChange={handleChange}
+              placeholder="Ex: museus, trilhas, praia..."
+            />
+          </label>
+
+          <label>Orçamento:
+            <select name="orcamento" value={formulario.orcamento} onChange={handleChange}>
+              <option value="Econômico">Econômico</option>
+              <option value="Médio">Médio</option>
+              <option value="Alto">Alto</option>
+            </select>
+          </label>
+
+          <label>Restrições:
+            <input
+              type="text"
+              name="restricoes"
+              value={formulario.restricoes}
+              onChange={handleChange}
+              placeholder="Ex: acessibilidade, alimentação..."
+            />
+          </label>
+
+          <button className="btn-enviar" type="submit">Gerar Roteiro</button>
         </div>
-      </div>
+      </form>
 
-      <div className="form-card">
-        <label><FaUserFriends /> Perfil dos Viajantes:</label>
-        <div className="select-group">
-          {perfis.map(p => (
-            <button key={p} className="card-btn">{p}</button>
-          ))}
-        </div>
-      </div>
-
-      <div className="form-card">
-        <label><FaTags /> Preferências:</label>
-        <div className="select-group">
-          {tagsPreferencias.map(p => (
-            <button key={p} className="tag-btn" onClick={() => togglePreferencia(p)}>{p}</button>
-          ))}
-        </div>
-      </div>
-
-      <div className="form-card">
-        <label><FaMoneyBillWave /> Orçamento:</label>
-        <div className="select-group">
-          {orcamentos.map(o => (
-            <button key={o} className="card-btn">{o}</button>
-          ))}
-        </div>
-      </div>
-
-      <div className="form-card">
-        <label>Restrições:</label>
-        <input type="text" placeholder="Ex: Evitar trilhas, Sem carne vermelha..." />
-      </div>
-
-      <button className="btn-enviar">✈️ Gerar Roteiro</button>
-    </div>
-  );
+      <Resultado resultado={resultado} />
+    </>
+  )
 }
