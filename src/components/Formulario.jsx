@@ -1,131 +1,89 @@
+import './Formulario.css';
 import React, { useState } from 'react';
-import { FaUser, FaCalendarAlt, FaMoneyBillWave, FaExclamationTriangle, FaList } from 'react-icons/fa';
-import DatePicker from 'react-datepicker';
-import 'react-datepicker/dist/react-datepicker.css';
+import { FaUserFriends, FaPlane, FaMapMarkedAlt, FaMoneyBillWave, FaTags } from 'react-icons/fa';
 
 export default function Formulario() {
-  const [dataInicio, setDataInicio] = useState(null);
-  const [dataFim, setDataFim] = useState(null);
-  const [perfilSelecionado, setPerfilSelecionado] = useState(null);
-  const [preferencias, setPreferencias] = useState([]);
-  const [restricoes, setRestricoes] = useState([]);
+  const [formData, setFormData] = useState({
+    destino: '',
+    dataInicio: '',
+    dataFim: '',
+    tipoRoteiro: '',
+    perfil: '',
+    preferencias: [],
+    orcamento: '',
+    restricoes: ''
+  });
 
-  const perfis = ['Família', 'Casal', 'Aventura', 'Gastronomia', 'Cultural'];
+  const tiposRoteiro = ['Cultural', 'Gastronômico', 'Natureza', 'Romântico'];
+  const perfis = ['Família', 'Casal', 'Sozinho', 'Melhor idade'];
+  const orcamentos = ['Econômico', 'Médio', 'Alto'];
+  const tagsPreferencias = ['Museus', 'Trilhas', 'Praia', 'Gastronomia'];
 
-  const opcoesPreferencias = ['Museus', 'Natureza', 'Comida', 'Noite', 'Compras'];
-  const opcoesRestricoes = ['Vegetariano', 'Mobilidade reduzida', 'Baixo custo', 'Pet Friendly'];
-
-  const toggleSelecionado = (item, lista, setLista) => {
-    setLista(lista.includes(item) ? lista.filter(i => i !== item) : [...lista, item]);
-  };
-
-  const gerarRoteiro = async () => {
-    const dados = {
-      dataInicio,
-      dataFim,
-      perfil: perfilSelecionado,
-      preferencias,
-      restricoes
-    };
-
-    const resposta = await fetch('/api/gerar-roteiro', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(dados)
+  function togglePreferencia(item) {
+    setFormData(prev => {
+      const already = prev.preferencias.includes(item);
+      const newPrefs = already ? prev.preferencias.filter(i => i !== item) : [...prev.preferencias, item];
+      return { ...prev, preferencias: newPrefs };
     });
-
-    const resultado = await resposta.json();
-    console.log(resultado);
-  };
+  }
 
   return (
-    <div className="glass p-8">
-      <h2 className="text-2xl font-bold text-gray-800 mb-6 flex items-center gap-2"><FaList /> Gerar Roteiro</h2>
-
-      {/* Datas */}
-      <div className="mb-4">
-        <label className="block mb-1 font-medium text-gray-700">Data de Início</label>
-        <div className="flex items-center border rounded-lg px-3 bg-white">
-          <FaCalendarAlt className="text-gray-500 mr-2" />
-          <DatePicker
-            selected={dataInicio}
-            onChange={setDataInicio}
-            dateFormat="dd/MM/yyyy"
-            className="w-full py-2 outline-none"
-            placeholderText="Selecione a data"
-          />
-        </div>
+    <div className="form-container">
+      <h2><FaPlane /> Gerador de Roteiros com IA</h2>
+      <div className="form-card">
+        <label>Destino:</label>
+        <input type="text" placeholder="Digite o destino" />
       </div>
 
-      <div className="mb-4">
-        <label className="block mb-1 font-medium text-gray-700">Data de Fim</label>
-        <div className="flex items-center border rounded-lg px-3 bg-white">
-          <FaCalendarAlt className="text-gray-500 mr-2" />
-          <DatePicker
-            selected={dataFim}
-            onChange={setDataFim}
-            dateFormat="dd/MM/yyyy"
-            className="w-full py-2 outline-none"
-            placeholderText="Selecione a data"
-          />
-        </div>
+      <div className="form-card">
+        <label>Data de Início:</label>
+        <input type="date" />
+        <label>Data de Fim:</label>
+        <input type="date" />
       </div>
 
-      {/* Perfil */}
-      <div className="mb-4">
-        <label className="block mb-2 font-medium text-gray-700">Perfil do Viajante</label>
-        <div className="flex flex-wrap gap-2">
-          {perfis.map((p, i) => (
-            <button
-              key={i}
-              onClick={() => setPerfilSelecionado(p)}
-              className={`px-4 py-2 rounded-full border ${perfilSelecionado === p ? 'bg-blue-600 text-white border-blue-600' : 'bg-gray-100 text-gray-800 border-gray-300'}`}
-            >
-              {p}
-            </button>
+      <div className="form-card">
+        <label><FaMapMarkedAlt /> Tipo de Roteiro:</label>
+        <div className="select-group">
+          {tiposRoteiro.map(tipo => (
+            <button key={tipo} className="card-btn">{tipo}</button>
           ))}
         </div>
       </div>
 
-      {/* Preferências */}
-      <div className="mb-4">
-        <label className="block mb-2 font-medium text-gray-700">Preferências</label>
-        <div className="flex flex-wrap gap-2">
-          {opcoesPreferencias.map((pref, i) => (
-            <button
-              key={i}
-              onClick={() => toggleSelecionado(pref, preferencias, setPreferencias)}
-              className={`px-4 py-2 rounded-full border ${preferencias.includes(pref) ? 'bg-green-500 text-white border-green-500' : 'bg-gray-100 text-gray-800 border-gray-300'}`}
-            >
-              {pref}
-            </button>
+      <div className="form-card">
+        <label><FaUserFriends /> Perfil dos Viajantes:</label>
+        <div className="select-group">
+          {perfis.map(p => (
+            <button key={p} className="card-btn">{p}</button>
           ))}
         </div>
       </div>
 
-      {/* Restrições */}
-      <div className="mb-6">
-        <label className="block mb-2 font-medium text-gray-700">Restrições</label>
-        <div className="flex flex-wrap gap-2">
-          {opcoesRestricoes.map((rest, i) => (
-            <button
-              key={i}
-              onClick={() => toggleSelecionado(rest, restricoes, setRestricoes)}
-              className={`px-4 py-2 rounded-full border ${restricoes.includes(rest) ? 'bg-red-500 text-white border-red-500' : 'bg-gray-100 text-gray-800 border-gray-300'}`}
-            >
-              {rest}
-            </button>
+      <div className="form-card">
+        <label><FaTags /> Preferências:</label>
+        <div className="select-group">
+          {tagsPreferencias.map(p => (
+            <button key={p} className="tag-btn" onClick={() => togglePreferencia(p)}>{p}</button>
           ))}
         </div>
       </div>
 
-      {/* Botão */}
-      <button
-        onClick={gerarRoteiro}
-        className="btn-enviar text-white font-semibold"
-      >
-        Gerar Roteiro Turístico
-      </button>
+      <div className="form-card">
+        <label><FaMoneyBillWave /> Orçamento:</label>
+        <div className="select-group">
+          {orcamentos.map(o => (
+            <button key={o} className="card-btn">{o}</button>
+          ))}
+        </div>
+      </div>
+
+      <div className="form-card">
+        <label>Restrições:</label>
+        <input type="text" placeholder="Ex: Evitar trilhas, Sem carne vermelha..." />
+      </div>
+
+      <button className="btn-enviar">✈️ Gerar Roteiro</button>
     </div>
   );
 }
