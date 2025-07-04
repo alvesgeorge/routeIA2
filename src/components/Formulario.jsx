@@ -1,93 +1,85 @@
 import React, { useState } from 'react';
+import { FaUser, FaCalendarAlt, FaMoneyBillWave, FaExclamationTriangle, FaList } from 'react-icons/fa';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
-import { FaMapMarkerAlt, FaCalendarAlt, FaUserFriends, FaList, FaMoneyBillAlt, FaHeartBroken } from 'react-icons/fa';
 
 export default function Formulario() {
-  const [inicio, setInicio] = useState(null);
-  const [fim, setFim] = useState(null);
-  const [perfilSelecionado, setPerfilSelecionado] = useState('');
+  const [dataInicio, setDataInicio] = useState(null);
+  const [dataFim, setDataFim] = useState(null);
+  const [perfilSelecionado, setPerfilSelecionado] = useState(null);
   const [preferencias, setPreferencias] = useState([]);
   const [restricoes, setRestricoes] = useState([]);
 
-  const opcoesPerfil = ['Família', 'Casal', 'Sozinho', 'Amigos'];
-  const opcoesPreferencias = ['Cultura', 'Natureza', 'Gastronomia', 'Compras'];
-  const opcoesRestricoes = ['Acessibilidade', 'Alimentar', 'Mobilidade'];
+  const perfis = ['Família', 'Casal', 'Aventura', 'Gastronomia', 'Cultural'];
 
-  const toggleSelecionado = (valor, lista, setLista) => {
-    setLista(prev =>
-      prev.includes(valor) ? prev.filter(v => v !== valor) : [...prev, valor]
-    );
+  const opcoesPreferencias = ['Museus', 'Natureza', 'Comida', 'Noite', 'Compras'];
+  const opcoesRestricoes = ['Vegetariano', 'Mobilidade reduzida', 'Baixo custo', 'Pet Friendly'];
+
+  const toggleSelecionado = (item, lista, setLista) => {
+    setLista(lista.includes(item) ? lista.filter(i => i !== item) : [...lista, item]);
+  };
+
+  const gerarRoteiro = async () => {
+    const dados = {
+      dataInicio,
+      dataFim,
+      perfil: perfilSelecionado,
+      preferencias,
+      restricoes
+    };
+
+    const resposta = await fetch('/api/gerar-roteiro', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(dados)
+    });
+
+    const resultado = await resposta.json();
+    console.log(resultado);
   };
 
   return (
-    <div className="bg-white bg-opacity-10 backdrop-blur-lg shadow-xl p-8 rounded-xl w-full max-w-2xl mx-auto">
-      <h2 className="text-2xl font-bold mb-6 text-center flex items-center justify-center gap-2">
-        🌍 Gerador de Roteiros com IA
-      </h2>
+    <div className="glass p-8">
+      <h2 className="text-2xl font-bold text-gray-800 mb-6 flex items-center gap-2"><FaList /> Gerar Roteiro</h2>
 
-      {/* Destino */}
+      {/* Datas */}
       <div className="mb-4">
-        <label className="block mb-1 font-medium flex items-center gap-2">
-          <FaMapMarkerAlt /> Destino:
-        </label>
-        <input type="text" placeholder="Digite o destino" className="w-full p-2 border rounded" />
+        <label className="block mb-1 font-medium text-gray-700">Data de Início</label>
+        <div className="flex items-center border rounded-lg px-3 bg-white">
+          <FaCalendarAlt className="text-gray-500 mr-2" />
+          <DatePicker
+            selected={dataInicio}
+            onChange={setDataInicio}
+            dateFormat="dd/MM/yyyy"
+            className="w-full py-2 outline-none"
+            placeholderText="Selecione a data"
+          />
+        </div>
       </div>
 
-      {/* Data de Início */}
       <div className="mb-4">
-        <label className="block mb-1 font-medium flex items-center gap-2">
-          <FaCalendarAlt /> Data de Início:
-        </label>
-        <DatePicker
-          selected={inicio}
-          onChange={date => setInicio(date)}
-          dateFormat="dd/MM/yyyy"
-          className="w-full p-2 border rounded"
-          placeholderText="dd/mm/aaaa"
-        />
+        <label className="block mb-1 font-medium text-gray-700">Data de Fim</label>
+        <div className="flex items-center border rounded-lg px-3 bg-white">
+          <FaCalendarAlt className="text-gray-500 mr-2" />
+          <DatePicker
+            selected={dataFim}
+            onChange={setDataFim}
+            dateFormat="dd/MM/yyyy"
+            className="w-full py-2 outline-none"
+            placeholderText="Selecione a data"
+          />
+        </div>
       </div>
 
-      {/* Data de Fim */}
+      {/* Perfil */}
       <div className="mb-4">
-        <label className="block mb-1 font-medium flex items-center gap-2">
-          <FaCalendarAlt /> Data de Fim:
-        </label>
-        <DatePicker
-          selected={fim}
-          onChange={date => setFim(date)}
-          dateFormat="dd/MM/yyyy"
-          className="w-full p-2 border rounded"
-          placeholderText="dd/mm/aaaa"
-        />
-      </div>
-
-      {/* Tipo de Roteiro */}
-      <div className="mb-4">
-        <label className="block mb-1 font-medium flex items-center gap-2">
-          <FaList /> Tipo de Roteiro:
-        </label>
-        <select className="w-full p-2 border rounded">
-          <option value="cultural">Cultural</option>
-          <option value="aventura">Aventura</option>
-          <option value="gastronomico">Gastronômico</option>
-          <option value="romantico">Romântico</option>
-        </select>
-      </div>
-
-      {/* Perfil dos Viajantes */}
-      <div className="mb-4">
-        <label className="block mb-1 font-medium flex items-center gap-2">
-          <FaUserFriends /> Perfil dos Viajantes:
-        </label>
+        <label className="block mb-2 font-medium text-gray-700">Perfil do Viajante</label>
         <div className="flex flex-wrap gap-2">
-          {opcoesPerfil.map(p => (
+          {perfis.map((p, i) => (
             <button
-              key={p}
+              key={i}
               onClick={() => setPerfilSelecionado(p)}
-              className={`px-3 py-1 rounded-full border ${
-                perfilSelecionado === p ? 'bg-blue-600 text-white' : 'bg-white text-gray-700'
-              }`}
+              className={`px-4 py-2 rounded-full border ${perfilSelecionado === p ? 'bg-blue-600 text-white border-blue-600' : 'bg-gray-100 text-gray-800 border-gray-300'}`}
             >
               {p}
             </button>
@@ -97,58 +89,42 @@ export default function Formulario() {
 
       {/* Preferências */}
       <div className="mb-4">
-        <label className="block mb-1 font-medium flex items-center gap-2">
-          <FaHeartBroken /> Preferências:
-        </label>
+        <label className="block mb-2 font-medium text-gray-700">Preferências</label>
         <div className="flex flex-wrap gap-2">
-          {opcoesPreferencias.map(p => (
+          {opcoesPreferencias.map((pref, i) => (
             <button
-              key={p}
-              onClick={() => toggleSelecionado(p, preferencias, setPreferencias)}
-              className={`px-3 py-1 rounded-full border ${
-                preferencias.includes(p) ? 'bg-green-600 text-white' : 'bg-white text-gray-700'
-              }`}
+              key={i}
+              onClick={() => toggleSelecionado(pref, preferencias, setPreferencias)}
+              className={`px-4 py-2 rounded-full border ${preferencias.includes(pref) ? 'bg-green-500 text-white border-green-500' : 'bg-gray-100 text-gray-800 border-gray-300'}`}
             >
-              {p}
+              {pref}
             </button>
           ))}
         </div>
       </div>
 
       {/* Restrições */}
-      <div className="mb-4">
-        <label className="block mb-1 font-medium flex items-center gap-2">
-          <FaHeartBroken /> Restrições:
-        </label>
+      <div className="mb-6">
+        <label className="block mb-2 font-medium text-gray-700">Restrições</label>
         <div className="flex flex-wrap gap-2">
-          {opcoesRestricoes.map(r => (
+          {opcoesRestricoes.map((rest, i) => (
             <button
-              key={r}
-              onClick={() => toggleSelecionado(r, restricoes, setRestricoes)}
-              className={`px-3 py-1 rounded-full border ${
-                restricoes.includes(r) ? 'bg-red-600 text-white' : 'bg-white text-gray-700'
-              }`}
+              key={i}
+              onClick={() => toggleSelecionado(rest, restricoes, setRestricoes)}
+              className={`px-4 py-2 rounded-full border ${restricoes.includes(rest) ? 'bg-red-500 text-white border-red-500' : 'bg-gray-100 text-gray-800 border-gray-300'}`}
             >
-              {r}
+              {rest}
             </button>
           ))}
         </div>
       </div>
 
-      {/* Orçamento */}
-      <div className="mb-6">
-        <label className="block mb-1 font-medium flex items-center gap-2">
-          <FaMoneyBillAlt /> Orçamento:
-        </label>
-        <select className="w-full p-2 border rounded">
-          <option value="baixo">Baixo</option>
-          <option value="médio">Médio</option>
-          <option value="alto">Alto</option>
-        </select>
-      </div>
-
-      <button className="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded font-semibold transition">
-        Gerar Roteiro
+      {/* Botão */}
+      <button
+        onClick={gerarRoteiro}
+        className="btn-enviar text-white font-semibold"
+      >
+        Gerar Roteiro Turístico
       </button>
     </div>
   );
