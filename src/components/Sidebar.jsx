@@ -1,15 +1,22 @@
-import { FaGlobeAmericas } from 'react-icons/fa'
+import { FaMapMarkedAlt, FaRegCalendarAlt, FaCog } from 'react-icons/fa';
 
 export default function Sidebar() {
   return (
     <aside className="sidebar">
       <div className="logo">
-        <FaGlobeAmericas size={28} color="#3b82f6" />
-        <span>TuristicRoute</span>
+        <FaMapMarkedAlt />
+        TuristicRoute
       </div>
-      <p>
-        Planeje sua viagem com ajuda da IA e descubra o melhor de cada destino.
-      </p>
+      <nav className="mt-8 flex flex-col gap-4 text-gray-700 font-medium">
+        <a href="#" className="flex items-center gap-2 hover:text-blue-600">
+          <FaRegCalendarAlt />
+          Criar Roteiro
+        </a>
+        <a href="#" className="flex items-center gap-2 hover:text-blue-600">
+          <FaCog />
+          Configurações
+        </a>
+      </nav>
     </aside>
-  )
+  );
 }
