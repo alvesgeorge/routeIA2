@@ -13,7 +13,108 @@
   text-align: center;
   color: #2563eb;
   font-size: 1.6em;
+  font-weight: 700;.form-container {
+  background: #fff;
+  border-radius: 20px;
+  box-shadow: 0 8px 32px rgba(37,99,235,0.08);
+  max-width: 600px;
+  margin: 40px auto;
+  padding: 36px 32px;
+  font-family: 'Segoe UI', sans-serif;
+  color: #1e293b;
+}
+.form-container h2 {
+  text-align: center;
+  color: #2563eb;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  justify-content: center;
+  margin-bottom: 30px;
+  font-size: 1.6em;
   font-weight: 700;
+}
+.form-card {
+  margin-bottom: 24px;
+}
+.form-card label {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+.form-card input[type="date"],
+.form-card input[type="text"],
+.autocomplete-cidade input {
+  width: 100%;
+  padding: 11px 12px;
+  border: 1px solid #dbeafe;
+  border-radius: 10px;
+  background: #f8fafc;
+  transition: border 0.2s, box-shadow 0.2s;
+}
+.form-card input:focus,
+.autocomplete-cidade input:focus {
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px #2563eb22;
+  outline: none;
+}
+.select-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  margin-top: 7px;
+}
+.card-btn,
+.tag-btn {
+  background: #f1f5f9;
+  border: 1.5px solid #cbd5e1;
+  border-radius: 10px;
+  padding: 9px 20px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
+}
+.card-btn.ativo,
+.tag-btn.ativo {
+  background: linear-gradient(90deg,#2563eb 60%,#4ade80 100%);
+  color: #fff;
+  border-color: #2563eb;
+  box-shadow: 0 2px 16px #2563eb33;
+  transform: scale(1.05);
+}
+.card-btn:hover,
+.tag-btn:hover {
+  background: #3b82f6;
+  color: white;
+  border-color: #3b82f6;
+  box-shadow: 0 3px 14px #2563eb15;
+  transform: scale(1.04);
+}
+.btn-enviar {
+  width: 100%;
+  padding: 14px;
+  background: linear-gradient(90deg,#16a34a 60%,#2563eb 100%);
+  color: #fff;
+  border: none;
+  border-radius: 12px;
+  font-size: 1.08em;
+  font-weight: 600;
+  margin-top: 12px;
+  cursor: pointer;
+  box-shadow: 0 3px 10px #16a34a17;
+  transition: background 0.22s, transform 0.18s;
+}
+.btn-enviar:hover {
+  background: linear-gradient(90deg,#2563eb 70%,#16a34a 100%);
+  transform: scale(1.03);
+}
+@media (max-width: 700px) {
+  .form-container { padding: 20px 7px; max-width: 98vw; }
+  .select-group { gap: 7px; }
+}
+
   margin-bottom: 30px;
   display: flex;
   align-items: center;
