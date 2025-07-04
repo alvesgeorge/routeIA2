@@ -129,7 +129,7 @@ export default function Formulario() {
         </div>
       </form>
 
-      <Resultado resultado={resultado} />
+     <Resultado roteiro={resultado?.data} />  
     </>
   )
 }
