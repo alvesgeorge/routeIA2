@@ -1,6 +1,7 @@
-import './App.css'
-import Sidebar from './components/Sidebar'
-import Formulario from './components/Formulario'
+import React from 'react'; // 👈 Importação necessária
+import './App.css';
+import Sidebar from './components/Sidebar';
+import Formulario from './components/Formulario';
 
 export default function App() {
   return (
@@ -10,5 +11,5 @@ export default function App() {
         <Formulario />
       </main>
     </div>
-  )
+  );
 }
