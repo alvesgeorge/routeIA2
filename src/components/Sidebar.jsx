@@ -1,5 +1,5 @@
-
-import React, { FaMapMarkedAlt } from 'react-icons/fa'
+import React from 'react'
+import { FaMapMarkedAlt } from 'react-icons/fa'
 
 export default function Sidebar() {
   return (
