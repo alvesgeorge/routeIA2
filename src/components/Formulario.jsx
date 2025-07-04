@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import GeoapifyGeocoderAutocomplete from '@geoapify/react-geocoder-autocomplete';
+import { GeoapifyGeocoderAutocomplete } from '@geoapify/react-geocoder-autocomplete';
 import '@geoapify/geocoder-autocomplete/styles/minimal.css';
 import { FaUserFriends, FaPlane, FaMapMarkedAlt, FaMoneyBillWave, FaTags, FaCalendarAlt, FaMapPin } from 'react-icons/fa';
 import './Formulario.css';
