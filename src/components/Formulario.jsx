@@ -76,7 +76,7 @@ export default function Formulario() {
         <label><FaMapPin /> Destino:</label>
         <GeoapifyGeocoderAutocomplete
           placeholder="Digite o destino"
-          apiKey="fa99ee03c14b4514a5daf766101cab7c"
+         apiKey={import.meta.env.VITE_GEOAPIFY_KEY}
           placeSelect={value => setDestino(value?.properties?.formatted || '')}
           type="city"
           lang="pt"
