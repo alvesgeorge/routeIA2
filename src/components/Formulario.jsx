@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import GeoapifyGeocoderAutocomplete from '@geoapify/react-geocoder-autocomplete';
+import '@geoapify/geocoder-autocomplete/styles/minimal.css';
 import { FaUserFriends, FaPlane, FaMapMarkedAlt, FaMoneyBillWave, FaTags, FaCalendarAlt, FaMapPin } from 'react-icons/fa';
 import './Formulario.css';
 
@@ -11,6 +13,8 @@ export default function Formulario() {
   const [orcamento, setOrcamento] = useState('Médio');
   const [preferencias, setPreferencias] = useState([]);
   const [restricoes, setRestricoes] = useState('');
+  const [resultado, setResultado] = useState(null);
+  const [carregando, setCarregando] = useState(false);
 
   const tiposRoteiro = ['Cultural', 'Gastronômico', 'Natureza', 'Romântico'];
   const perfis = ['Família', 'Casal', 'Solo', 'Melhor Idade'];
@@ -25,27 +29,58 @@ export default function Formulario() {
     );
   }
 
-  function handleSubmit(e) {
+  async function handleSubmit(e) {
     e.preventDefault();
-    // Aqui você monta o objeto com todos os estados e envia para API normalmente
-    // Exemplo: enviar { destino, dataInicio, dataFim, tipoRoteiro, perfil, preferencias, orcamento, restricoes }
-    alert('Funcionalidade de envio aqui');
+
+    if (!destino) {
+      alert('Selecione um destino.');
+      return;
+    }
+
+    setCarregando(true);
+
+    const dados = {
+      destino,
+      dataInicio,
+      dataFim,
+      tipoRoteiro,
+      perfil,
+      preferencias,
+      orcamento,
+      restricoes
+    };
+
+    try {
+      const response = await fetch('/api/gerarRoteiro', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(dados)
+      });
+
+      const resultado = await response.json();
+      setResultado(resultado);
+    } catch (err) {
+      alert('Erro ao gerar roteiro');
+      console.error(err);
+    } finally {
+      setCarregando(false);
+    }
   }
 
   return (
     <form className="form-container" onSubmit={handleSubmit}>
       <h2><FaPlane /> Gerador de Roteiros com IA</h2>
 
-      {/* Destino */}
+      {/* Destino (com autocomplete Geoapify) */}
       <div className="form-card">
         <label><FaMapPin /> Destino:</label>
-        <input
-          type="text"
-          className="input-destino"
+        <GeoapifyGeocoderAutocomplete
           placeholder="Digite o destino"
-          value={destino}
-          onChange={e => setDestino(e.target.value)}
-          required
+          apiKey="fa99ee03c14b4514a5daf766101cab7c"
+          placeSelect={value => setDestino(value?.properties?.formatted || '')}
+          type="city"
+          lang="pt"
+          className="autocomplete-cidade"
         />
       </div>
 
@@ -146,7 +181,16 @@ export default function Formulario() {
         />
       </div>
 
-      <button className="btn-enviar" type="submit">✈️ Gerar Roteiro</button>
+      <button className="btn-enviar" type="submit" disabled={carregando}>
+        {carregando ? 'Gerando Roteiro...' : '✈️ Gerar Roteiro'}
+      </button>
+
+      {/* Exemplo de exibição do resultado na tela */}
+      {resultado && (
+        <div style={{ marginTop: 32 }}>
+          <pre>{JSON.stringify(resultado, null, 2)}</pre>
+        </div>
+      )}
     </form>
   );
 }
