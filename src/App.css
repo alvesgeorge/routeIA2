@@ -1,0 +1,102 @@
+body {
+  margin: 0;
+  font-family: 'Segoe UI', sans-serif;
+  background: linear-gradient(to bottom right, #e0f0ff, #fdfdfd);
+  display: flex;
+  height: 100vh;
+}
+
+.app {
+  display: flex;
+  width: 100%;
+}
+
+.sidebar {
+  width: 250px;
+  background: white;
+  padding: 20px;
+  box-shadow: 4px 0 12px rgba(0,0,0,0.1);
+}
+
+.sidebar .logo {
+  font-size: 1.4em;
+  font-weight: bold;
+  color: #3b82f6;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 20px;
+}
+
+.main-content {
+  flex: 1;
+  padding: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+}
+
+.glass {
+  background: rgba(255,255,255,0.85);
+  backdrop-filter: blur(8px);
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+  padding: 30px;
+  width: 100%;
+  max-width: 700px;
+}
+
+.formulario label {
+  display: block;
+  margin-bottom: 16px;
+  font-weight: 500;
+}
+
+.formulario input, .formulario select {
+  width: 100%;
+  padding: 10px;
+  margin-top: 6px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 1em;
+}
+
+.perfil-opcoes, .icone-selecao {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.perfil-btn, .icone-btn {
+  background: #f1f5f9;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  padding: 10px 14px;
+  cursor: pointer;
+  font-size: 0.95em;
+  transition: 0.3s;
+}
+
+.perfil-btn:hover, .icone-btn:hover {
+  background: #3b82f6;
+  color: white;
+  border-color: #3b82f6;
+}
+
+.btn-enviar {
+  width: 100%;
+  margin-top: 20px;
+  padding: 12px;
+  font-size: 1em;
+  background: #2563eb;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.btn-enviar:hover {
+  background: #1d4ed8;
+}
