@@ -1,15 +1,41 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
 body {
-  @apply bg-gradient-to-br from-blue-100 to-white min-h-screen font-sans text-gray-800;
+  margin: 0;
+  font-family: 'Segoe UI', sans-serif;
+  background: linear-gradient(to bottom right, #e0f0ff, #fdfdfd);
+  min-height: 100vh;
 }
 
 .app {
-  @apply flex flex-col md:flex-row items-start;
+  display: flex;
+}
+
+.sidebar {
+  width: 250px;
+  background: white;
+  padding: 40px 20px;
+  box-shadow: 4px 0 12px rgba(0,0,0,0.1);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.sidebar .logo {
+  font-size: 1.7em;
+  font-weight: bold;
+  color: #2563eb;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 24px;
+}
+
+.sidebar p {
+  font-size: 1em;
+  color: #334155;
+  text-align: center;
 }
 
 .main-content {
-  @apply flex-1 p-6 flex justify-center items-start;
+  flex: 1;
+  padding: 40px;
 }
