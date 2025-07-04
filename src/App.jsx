@@ -1,5 +1,5 @@
 // src/App.jsx
-import { useState } from 'react';
+import React from 'react';
 import Formulario from './components/Formulario';
 import RoteiroCard from './components/RoteiroCard';
 
