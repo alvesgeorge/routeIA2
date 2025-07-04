@@ -1,5 +1,5 @@
-
 import React from 'react';
+import './Resultado.css';
 
 export default function Resultado({ roteiro }) {
   if (!roteiro || roteiro.length === 0) {
