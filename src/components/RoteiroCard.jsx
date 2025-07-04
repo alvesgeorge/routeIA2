@@ -1,52 +1,44 @@
-// src/components/RoteiroCard.jsx
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
-
-function Atividade({ atividade }) {
-  const [foto, setFoto] = useState(null);
-
-  useEffect(() => {
-    async function buscarFoto() {
-      try {
-        const resp = await axios.get(`https://api.unsplash.com/search/photos`, {
-          params: { query: atividade.local, per_page: 1 },
-          headers: {
-            Authorization: `Client-ID ${import.meta.env.VITE_UNSPLASH_ACCESS_KEY}`
-          }
-        });
-        if (resp.data.results.length > 0) {
-          setFoto(resp.data.results[0].urls.small);
-        }
-      } catch (err) {
-        console.error('Erro ao buscar imagem', err);
-      }
-    }
-    buscarFoto();
-  }, [atividade.local]);
-
-  return (
-    <div className="bg-white rounded-lg shadow-md overflow-hidden flex flex-col md:flex-row">
-      {foto && (
-        <img src={foto} alt={atividade.local} className="w-full md:w-48 h-48 object-cover" />
-      )}
-      <div className="p-4 flex-1">
-        <h3 className="text-xl font-bold">{atividade.hora} - {atividade.local}</h3>
-        <p className="mt-1">{atividade.descricao}</p>
-        <p className="text-sm mt-2">💰 {atividade.custo} | 🚗 {atividade.transporte} | 🍴 {atividade.restauranteProximo}</p>
-      </div>
-    </div>
-  );
-}
 
 export default function RoteiroCard({ data, atividades }) {
+  const [imagens, setImagens] = useState({});
+
+  useEffect(() => {
+    async function buscarImagens() {
+      const novasImagens = {};
+      for (const atv of atividades) {
+        try {
+          const res = await fetch(`https://api.unsplash.com/search/photos?query=${encodeURIComponent(atv.local)}&client_id=${import.meta.env.VITE_UNSPLASH_ACCESS_KEY}`);
+          const data = await res.json();
+          novasImagens[atv.local] = data.results[0]?.urls?.small || '';
+        } catch {
+          novasImagens[atv.local] = '';
+        }
+      }
+      setImagens(novasImagens);
+    }
+
+    buscarImagens();
+  }, [atividades]);
+
   return (
-    <div className="bg-blue-100 p-4 rounded-lg shadow-md">
-      <h2 className="text-2xl font-semibold mb-3">📅 {data}</h2>
-      <div className="space-y-4">
-        {atividades.map((atividade, i) => (
-          <Atividade key={i} atividade={atividade} />
-        ))}
-      </div>
+    <div className="bg-white/70 backdrop-blur shadow-md rounded-xl p-5 space-y-4">
+      <h3 className="text-xl font-bold text-blue-700">📅 {data}</h3>
+      {atividades.map((atv, idx) => (
+        <div key={idx} className="flex gap-4 bg-white/80 p-4 rounded-lg shadow-sm">
+          {imagens[atv.local] && (
+            <img src={imagens[atv.local]} alt={atv.local} className="w-24 h-24 object-cover rounded-md" />
+          )}
+          <div>
+            <p className="font-semibold text-lg">{atv.local}</p>
+            <p className="text-sm text-gray-600">{atv.descricao}</p>
+            <p className="text-sm mt-1">🕒 {atv.hora} | 🚗 {atv.transporte} | 💵 R$ {atv.custo}</p>
+            {atv.restauranteProximo && (
+              <p className="text-sm mt-1">🍽️ Próximo: {atv.restauranteProximo}</p>
+            )}
+          </div>
+        </div>
+      ))}
     </div>
   );
 }
