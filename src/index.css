@@ -1,4 +1,12 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-body {@apply bg-gradient-to-r from-blue-50 to-blue-100 text-gray-800;}
+
+/* Fontes e personalização leve */
+body {
+  @apply bg-blue-50 text-gray-800;
+}
+
+h1, h2, h3 {
+  @apply tracking-wide;
+}
