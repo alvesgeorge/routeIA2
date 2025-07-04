@@ -2,16 +2,4 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Fontes e personalização leve */
-body {
-  @apply bg-blue-50 text-gray-800;
-}
-
-h1, h2, h3 {
-  @apply tracking-wide;
-}
-
-.input {
-  @apply w-full p-3 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400 bg-white/90;
-}
-
+/* Seu CSS global, ou deixe vazio se usar só Tailwind */
