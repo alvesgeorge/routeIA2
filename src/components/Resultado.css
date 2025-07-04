@@ -17,6 +17,52 @@
   color: #2563eb;
   text-align: center;
 }
+.resultado-container {
+  background: #ffffffdd;
+  backdrop-filter: blur(6px);
+  border-radius: 12px;
+  box-shadow: 0 4px 18px rgba(0,0,0,0.08);
+  padding: 30px;
+  max-width: 900px;
+  margin: 30px auto;
+  color: #1e293b;
+}
+
+.dia-card {
+  background: #fff;
+  border-radius: 18px;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.06);
+  padding: 24px;
+  margin-bottom: 32px;
+}
+
+.data {
+  color: #2563eb;
+  font-weight: 700;
+  font-size: 1.3em;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.atividade {
+  border-left: 4px solid #2563eb;
+  background: #f1f5f9;
+  padding: 16px 24px;
+  margin-bottom: 18px;
+  border-radius: 10px;
+}
+
+.atividade h3 {
+  margin: 0 0 8px;
+}
+
+.detalhes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  font-size: 0.95em;
+  color: #475569;
+}
 
 .dia-roteiro {
   margin-bottom: 30px;
