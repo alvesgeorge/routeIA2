@@ -41,4 +41,23 @@ export default function Formulario({ onResultado }) {
           {type === 'textarea' ? (
             <textarea id={id} value={form[id]} onChange={handleChange} className="w-full border p-2 rounded" />
           ) : (
-            <input type={type} id={id} value={form[id]} onChange={handleChange} className="w-fu
+            <input type={type} id={id} value={form[id]} onChange={handleChange} className="w-full border p-2 rounded" />
+          )}
+        </div>
+      ))}
+
+      <div>
+        <label className="font-semibold">Orçamento</label>
+        <select id="orcamento" value={form.orcamento} onChange={handleChange} className="w-full border p-2 rounded">
+          <option value="baixo">Baixo</option>
+          <option value="médio">Médio</option>
+          <option value="alto">Alto</option>
+        </select>
+      </div>
+
+      <button onClick={handleSubmit} className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+        Gerar Roteiro
+      </button>
+    </div>
+  );
+}
