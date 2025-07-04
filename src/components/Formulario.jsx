@@ -1,30 +1,72 @@
 import React, { useState } from 'react';
+import { FaUserFriends, FaPlane, FaMapMarkedAlt, FaMoneyBillWave, FaTags, FaCalendarAlt, FaMapPin } from 'react-icons/fa';
 import './Formulario.css';
-import { FaUserFriends, FaPlane, FaMapMarkedAlt, FaMoneyBillWave, FaTags } from 'react-icons/fa';
 
 export default function Formulario() {
+  const [destino, setDestino] = useState('');
+  const [dataInicio, setDataInicio] = useState('');
+  const [dataFim, setDataFim] = useState('');
   const [tipoRoteiro, setTipoRoteiro] = useState('Cultural');
   const [perfil, setPerfil] = useState('');
   const [orcamento, setOrcamento] = useState('Médio');
   const [preferencias, setPreferencias] = useState([]);
+  const [restricoes, setRestricoes] = useState('');
+
   const tiposRoteiro = ['Cultural', 'Gastronômico', 'Natureza', 'Romântico'];
   const perfis = ['Família', 'Casal', 'Solo', 'Melhor Idade'];
   const orcamentos = ['Econômico', 'Médio', 'Alto'];
   const tagsPreferencias = ['Museus', 'Trilhas', 'Praia', 'Gastronomia'];
 
-  // Exemplo de seleção visual para preferências (estilo tags)
   function togglePreferencia(item) {
-    setPreferencias(prev => (
+    setPreferencias(prev =>
       prev.includes(item)
         ? prev.filter(i => i !== item)
         : [...prev, item]
-    ));
+    );
+  }
+
+  function handleSubmit(e) {
+    e.preventDefault();
+    // Aqui você monta o objeto com todos os estados e envia para API normalmente
+    // Exemplo: enviar { destino, dataInicio, dataFim, tipoRoteiro, perfil, preferencias, orcamento, restricoes }
+    alert('Funcionalidade de envio aqui');
   }
 
   return (
-    <div className="form-container">
+    <form className="form-container" onSubmit={handleSubmit}>
       <h2><FaPlane /> Gerador de Roteiros com IA</h2>
-      
+
+      {/* Destino */}
+      <div className="form-card">
+        <label><FaMapPin /> Destino:</label>
+        <input
+          type="text"
+          className="input-destino"
+          placeholder="Digite o destino"
+          value={destino}
+          onChange={e => setDestino(e.target.value)}
+          required
+        />
+      </div>
+
+      {/* Datas */}
+      <div className="form-card">
+        <label><FaCalendarAlt /> Data de Início:</label>
+        <input
+          type="date"
+          value={dataInicio}
+          onChange={e => setDataInicio(e.target.value)}
+          required
+        />
+        <label><FaCalendarAlt /> Data de Fim:</label>
+        <input
+          type="date"
+          value={dataFim}
+          onChange={e => setDataFim(e.target.value)}
+          required
+        />
+      </div>
+
       {/* Tipo de Roteiro */}
       <div className="form-card">
         <label><FaMapMarkedAlt /> Tipo de Roteiro:</label>
@@ -33,7 +75,7 @@ export default function Formulario() {
             <button
               key={tipo}
               className={`card-btn${tipoRoteiro === tipo ? ' ativo' : ''}`}
-              onClick={() => setTipoRoteiro(tipo)}
+              onClick={e => { e.preventDefault(); setTipoRoteiro(tipo); }}
               type="button"
             >
               {tipo}
@@ -41,7 +83,7 @@ export default function Formulario() {
           ))}
         </div>
       </div>
-      
+
       {/* Perfil dos Viajantes */}
       <div className="form-card">
         <label><FaUserFriends /> Perfil dos Viajantes:</label>
@@ -50,7 +92,7 @@ export default function Formulario() {
             <button
               key={p}
               className={`card-btn${perfil === p ? ' ativo' : ''}`}
-              onClick={() => setPerfil(p)}
+              onClick={e => { e.preventDefault(); setPerfil(p); }}
               type="button"
             >
               {p}
@@ -58,7 +100,7 @@ export default function Formulario() {
           ))}
         </div>
       </div>
-      
+
       {/* Preferências */}
       <div className="form-card">
         <label><FaTags /> Preferências:</label>
@@ -67,7 +109,7 @@ export default function Formulario() {
             <button
               key={p}
               className={`tag-btn${preferencias.includes(p) ? ' ativo' : ''}`}
-              onClick={() => togglePreferencia(p)}
+              onClick={e => { e.preventDefault(); togglePreferencia(p); }}
               type="button"
             >
               {p}
@@ -75,7 +117,7 @@ export default function Formulario() {
           ))}
         </div>
       </div>
-      
+
       {/* Orçamento */}
       <div className="form-card">
         <label><FaMoneyBillWave /> Orçamento:</label>
@@ -84,7 +126,7 @@ export default function Formulario() {
             <button
               key={o}
               className={`card-btn${orcamento === o ? ' ativo' : ''}`}
-              onClick={() => setOrcamento(o)}
+              onClick={e => { e.preventDefault(); setOrcamento(o); }}
               type="button"
             >
               {o}
@@ -92,9 +134,19 @@ export default function Formulario() {
           ))}
         </div>
       </div>
-      
-      {/* Campos tradicionais podem ser adicionados aqui */}
-      {/* <button ...>Gerar Roteiro</button> */}
-    </div>
+
+      {/* Restrições */}
+      <div className="form-card">
+        <label>Restrições:</label>
+        <input
+          type="text"
+          placeholder="Ex: acessibilidade, alimentação..."
+          value={restricoes}
+          onChange={e => setRestricoes(e.target.value)}
+        />
+      </div>
+
+      <button className="btn-enviar" type="submit">✈️ Gerar Roteiro</button>
+    </form>
   );
 }
