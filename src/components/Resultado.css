@@ -1,0 +1,51 @@
+
+.resultado-container {
+  background: #ffffffdd;
+  backdrop-filter: blur(6px);
+  border-radius: 12px;
+  box-shadow: 0 4px 18px rgba(0,0,0,0.08);
+  padding: 30px;
+  max-width: 900px;
+  margin: 30px auto;
+  font-family: 'Segoe UI', sans-serif;
+  color: #1e293b;
+}
+
+.resultado-container h2 {
+  font-size: 1.5em;
+  margin-bottom: 20px;
+  color: #2563eb;
+  text-align: center;
+}
+
+.dia-roteiro {
+  margin-bottom: 30px;
+}
+
+.dia-roteiro h3 {
+  background: #3b82f6;
+  color: white;
+  padding: 10px 16px;
+  border-radius: 8px;
+  font-size: 1.2em;
+}
+
+.atividade {
+  border-left: 4px solid #3b82f6;
+  padding-left: 16px;
+  margin-top: 20px;
+  background: #f1f5f9;
+  padding: 12px;
+  border-radius: 8px;
+}
+
+.atividade strong {
+  display: inline-block;
+  width: 100px;
+  color: #1e40af;
+}
+
+.atividade p {
+  margin: 4px 0;
+  font-size: 0.95em;
+}
